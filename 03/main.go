@@ -80,13 +80,70 @@ func handle1(file *os.File) {
 		totalJolt += maxJolt
 	}
 
-	fmt.Println(totalJolt)
+	fmt.Println(">>", totalJolt)
 }
 
 func handle2(file *os.File) {
 	scanner := bufio.NewScanner(file)
+	totalJolt := 0
+
 	for scanner.Scan() {
 		line := scanner.Text()
-		fmt.Println(strconv.Atoi(line))
+		lineLen := len(line)
+
+		MAX_DIGIT := 12
+		lastMaxIdx := -1
+
+		maxJolt := ""
+
+		for i := range MAX_DIGIT {
+			lastLineIdx := lineLen + 1 - (MAX_DIGIT - i)
+			iterSubset := ""
+
+			if i == 0 {
+				iterSubset = line[0:lastLineIdx]
+			} else {
+				/*
+					retro: should be able to check, if the text remaining length is equal
+					to whatever that's required during the loop, we can exit early
+				*/
+				iterSubset = line[lastMaxIdx+1 : lastLineIdx]
+			}
+
+			firstMaxInt := 0
+			firstMaxStr := ""
+			currentLastMaxIdx := lastMaxIdx + 1
+
+			for idx, ch := range iterSubset {
+				chStr := string(ch)
+				chInt, _ := strconv.Atoi(chStr)
+
+				if chInt > firstMaxInt {
+					firstMaxInt = chInt
+					firstMaxStr = chStr
+
+					if i == 0 {
+						lastMaxIdx = idx
+					} else {
+						lastMaxIdx = idx + currentLastMaxIdx
+					}
+				}
+			}
+
+			if firstMaxStr == "" {
+				log.Fatal("failed to find max int")
+			}
+
+			maxJolt += firstMaxStr
+		}
+
+		if len(maxJolt) != 12 {
+			log.Fatal("max jolt is not 12 char")
+		}
+
+		maxJoltInt, _ := strconv.Atoi(maxJolt)
+		totalJolt += maxJoltInt
 	}
+
+	fmt.Println(">>", totalJolt)
 }
