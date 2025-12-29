@@ -160,7 +160,7 @@ func checkLines(grid []string) GridCheckResult {
 	totalCount := 0
 
 	for currentRowIdx := range rowLen {
-		nextRow := ""
+		var nextRow strings.Builder
 
 		if currentRowIdx == 0 || currentRowIdx+1 == rowLen {
 			continue
@@ -176,7 +176,7 @@ func checkLines(grid []string) GridCheckResult {
 
 			// skip if this is not paper
 			if grid[currentRowIdx][currentColIdx] != '@' {
-				nextRow += "."
+				nextRow.WriteString(".")
 				continue
 			}
 
@@ -201,14 +201,15 @@ func checkLines(grid []string) GridCheckResult {
 
 			totalValid := strings.Count(string(surroundChars), "@")
 			if totalValid < 4 {
-				nextRow += "."
+				nextRow.WriteString(".")
 				totalCount++
 			} else {
-				nextRow += grid[currentRowIdx][currentColIdx : currentColIdx+1]
+				nextRow.WriteByte(grid[currentRowIdx][currentColIdx])
 			}
 		}
 
-		nextGrid = append(nextGrid, "."+nextRow+".")
+		nextRowStr := nextRow.String()
+		nextGrid = append(nextGrid, "."+nextRowStr+".")
 	}
 
 	nextGrid = append(nextGrid, grid[0])
