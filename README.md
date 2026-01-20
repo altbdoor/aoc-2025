@@ -1,6 +1,7 @@
 # aoc-2025
 
-_In progress..._
+_Stopped at day 7 because things are just too difficult for this old brain._
+_Peeked at day 8 and 9 and find myself equally stumped._
 
 [Advent of Code 2025](https://adventofcode.com/2025/), done in [Golang](https://go.dev/).
 
